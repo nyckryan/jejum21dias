@@ -86,21 +86,7 @@ Exemplo de oração:
 
 “Senhor, eu também coloco diante de Ti a vida dos meus avós. Abençoa a saúde deles e guarda cada dia da vida deles. Enche a casa deles com tua paz e tua presença. Que eles sintam teu cuidado e tua proteção em todos os momentos.”
 
-6️⃣ Leitura da Palavra
-
-Finalize seu momento espiritual com a leitura da Bíblia. A Palavra de Deus fortalece a fé, traz direção e nos ensina como viver.
-
-Depois de ler o versículo do dia, reflita sobre três perguntas simples:
-
-• O que Deus está me ensinando através deste texto?
-• Existe algo que preciso mudar na minha vida?
-• Como posso aplicar esse ensinamento hoje?
-
-Você também pode terminar esse momento com uma oração curta, pedindo que Deus ajude você a colocar em prática aquilo que aprendeu.
-
-Exemplo de oração final:
-
-“Senhor, obrigado pela tua Palavra. Ajuda-me a guardar esses ensinamentos no meu coração e viver de acordo com eles. Que minha vida reflita tua vontade em tudo o que eu fizer hoje. Em nome de Jesus, amém.”
+6️⃣ Leitura do livro do Jejum
 
 """)
 
