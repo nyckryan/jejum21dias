@@ -9,30 +9,32 @@ st.title("🙏 Jejum Espiritual - 21 Dias")
 st.caption("Tema: Noiva de Cristo")
 
 # -----------------------------
-# ARQUIVO DE PROGRESSO
+# PROGRESSO
 # -----------------------------
 
 progress_file = "progress.json"
 
 if not os.path.exists(progress_file):
-    with open(progress_file, "w") as f:
-        json.dump([False]*len(planos), f)
+    progresso_salvo = [False] * len(planos)
+else:
+    with open(progress_file, "r") as f:
+        progresso_salvo = json.load(f)
 
-with open(progress_file, "r") as f:
-    progresso_salvo = json.load(f)
+# garante tamanho correto
+if len(progresso_salvo) != len(planos):
+    progresso_salvo = [False] * len(planos)
 
 # -----------------------------
-# ARQUIVO DE ALVOS
+# ALVOS
 # -----------------------------
 
 alvos_file = "alvos.json"
 
 if not os.path.exists(alvos_file):
-    with open(alvos_file, "w") as f:
-        json.dump({"pai":"", "avos":""}, f)
-
-with open(alvos_file, "r") as f:
-    alvos_salvos = json.load(f)
+    alvos_salvos = {"pai": "", "avos": ""}
+else:
+    with open(alvos_file, "r") as f:
+        alvos_salvos = json.load(f)
 
 # -----------------------------
 # TABS
@@ -41,14 +43,13 @@ with open(alvos_file, "r") as f:
 tabs = st.tabs(["📅 Plano","📖 Versículo","🙏 Orações","🎯 Alvos"])
 
 # -----------------------------
-# ABA PLANO
+# PLANO
 # -----------------------------
 
 with tabs[0]:
 
     st.subheader("Plano de 21 dias")
 
-    # calcular progresso atual
     completos = sum(progresso_salvo)
     total = len(planos)
     porcentagem = int((completos / total) * 100)
@@ -65,20 +66,23 @@ with tabs[0]:
 
     for i, dia in enumerate(planos):
 
+        valor = False
+        if i < len(progresso_salvo):
+            valor = progresso_salvo[i]
+
         check = st.checkbox(
             f"Dia {dia['dia']} - {dia['tema']}",
-            value=progresso_salvo[i],
+            value=valor,
             key=f"dia_{i}"
         )
 
         novo_progresso.append(check)
 
-    # salvar progresso
     with open(progress_file, "w") as f:
         json.dump(novo_progresso, f)
 
 # -----------------------------
-# ABA VERSÍCULO
+# VERSÍCULO
 # -----------------------------
 
 with tabs[1]:
@@ -108,7 +112,7 @@ with tabs[1]:
     st.write(dia_escolhido["aplicacao"])
 
 # -----------------------------
-# ABA ORAÇÕES
+# ORAÇÃO
 # -----------------------------
 
 with tabs[2]:
@@ -116,52 +120,27 @@ with tabs[2]:
     st.subheader("Guia de Oração")
 
     st.markdown("""
-### Guia de Oração – Tempo de Consagração Diária
-
 ### 1️⃣ Adoração
-Comece reconhecendo quem Deus é e agradecendo por sua presença.
-
-**Exemplo:**
-"Senhor Deus, eu te louvo e te agradeço por quem Tu és. Tu és santo e digno de toda honra."
-
----
+Reconheça quem Deus é e agradeça pela vida.
 
 ### 2️⃣ Entrega a Deus
-Entregue a Deus seus planos, preocupações e decisões.
-
-**Exemplo:**
-"Senhor, hoje eu entrego minha vida em Tuas mãos. Guia meus passos."
-
----
+Entregue seus planos, decisões e preocupações.
 
 ### 3️⃣ Transformação Espiritual
-Peça que Deus transforme seu caráter.
-
-**Exemplo:**
-"Senhor, transforma meu coração e me ensina a viver segundo tua vontade."
-
----
+Peça que Deus transforme seu coração.
 
 ### 4️⃣ Intercessão pelo Pai
-Ore pela saúde, proteção e vida espiritual do seu pai.
-
----
+Ore pela vida, saúde e proteção do seu pai.
 
 ### 5️⃣ Intercessão pelos Avós
-Apresente seus avós diante de Deus e peça bênçãos sobre a vida deles.
-
----
+Apresente seus avós diante de Deus.
 
 ### 6️⃣ Leitura da Palavra
-Leia o versículo do dia e reflita:
-
-• O que Deus quer me ensinar hoje?  
-• Existe algo que preciso mudar?  
-• Como posso aplicar isso hoje?
+Leia o versículo do dia e reflita sobre como aplicar na sua vida.
 """)
 
 # -----------------------------
-# ABA ALVOS
+# ALVOS
 # -----------------------------
 
 with tabs[3]:
@@ -170,12 +149,12 @@ with tabs[3]:
 
     pai = st.text_area(
         "Pedidos de oração pelo Pai",
-        value=alvos_salvos["pai"]
+        value=alvos_salvos.get("pai","")
     )
 
     avos = st.text_area(
         "Pedidos de oração pelos Avós",
-        value=alvos_salvos["avos"]
+        value=alvos_salvos.get("avos","")
     )
 
     if st.button("Salvar Alvos"):
