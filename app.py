@@ -1,6 +1,6 @@
-
 import streamlit as st
 import json
+import os
 from planos import planos
 
 st.set_page_config(page_title="Jejum 21 Dias", page_icon="🙏", layout="centered")
@@ -8,93 +8,190 @@ st.set_page_config(page_title="Jejum 21 Dias", page_icon="🙏", layout="centere
 st.title("🙏 Jejum Espiritual - 21 Dias")
 st.caption("Tema: Noiva de Cristo")
 
+# -----------------------------
+# ARQUIVO DE PROGRESSO
+# -----------------------------
+
+progress_file = "progress.json"
+
+if not os.path.exists(progress_file):
+    with open(progress_file, "w") as f:
+        json.dump([False]*len(planos), f)
+
+with open(progress_file, "r") as f:
+    progresso_salvo = json.load(f)
+
+# -----------------------------
+# ARQUIVO DE ALVOS
+# -----------------------------
+
+alvos_file = "alvos.json"
+
+if not os.path.exists(alvos_file):
+    with open(alvos_file, "w") as f:
+        json.dump({"pai":"", "avos":""}, f)
+
+with open(alvos_file, "r") as f:
+    alvos_salvos = json.load(f)
+
+# -----------------------------
+# TABS
+# -----------------------------
+
 tabs = st.tabs(["📅 Plano","📖 Versículo","🙏 Orações","🎯 Alvos"])
 
+# -----------------------------
+# ABA PLANO
+# -----------------------------
+
 with tabs[0]:
-    progresso = []
-    for dia in planos:
-        check = st.checkbox(f"Dia {dia['dia']} - {dia['tema']}")
-        progresso.append(check)
-    if progresso:
-        st.progress(sum(progresso)/len(planos))
+
+    st.subheader("Plano de 21 dias")
+
+    novo_progresso = []
+
+    for i, dia in enumerate(planos):
+
+        check = st.checkbox(
+            f"Dia {dia['dia']} - {dia['tema']}",
+            value=progresso_salvo[i],
+            key=f"dia_{i}"
+        )
+
+        novo_progresso.append(check)
+
+    # salvar progresso
+    with open(progress_file, "w") as f:
+        json.dump(novo_progresso, f)
+
+    completos = sum(novo_progresso)
+
+    st.divider()
+
+    st.subheader("📊 Progresso")
+
+    st.progress(completos / len(planos))
+
+    st.write(f"{completos} de {len(planos)} dias concluídos")
+
+# -----------------------------
+# ABA VERSÍCULO
+# -----------------------------
 
 with tabs[1]:
+
     dia_escolhido = st.selectbox(
         "Escolha o dia",
         planos,
         format_func=lambda x: f"Dia {x['dia']} - {x['tema']}"
     )
+
     st.subheader(dia_escolhido["tema"])
+
     st.markdown(f"**{dia_escolhido['versiculo_ref']}**")
+
     st.write(dia_escolhido["versiculo"])
+
     st.divider()
+
     st.subheader("🔎 Contexto Histórico")
+
     st.write(dia_escolhido["contexto"])
+
+    st.divider()
+
     st.subheader("📚 Aplicação Prática")
+
     st.write(dia_escolhido["aplicacao"])
 
+# -----------------------------
+# ABA ORAÇÕES
+# -----------------------------
+
 with tabs[2]:
+
     st.subheader("Guia de Oração")
-    st.write("""
-Guia de Oração – Tempo de Consagração Diária
 
-1️⃣ Adoração
+    st.markdown("""
+### Guia de Oração – Tempo de Consagração Diária
 
-Comece seu tempo de oração reconhecendo quem Deus é. A adoração não é pedir algo, mas honrar e exaltar o Senhor por Sua grandeza, santidade, amor e poder. Quando adoramos a Deus, alinhamos nosso coração com a presença dEle e lembramos que Ele é soberano sobre todas as coisas.
+### 1️⃣ Adoração
 
-Durante esse momento, você pode agradecer a Deus pela vida, pela salvação, pela família e por tudo o que Ele já fez. A adoração prepara o coração para um relacionamento mais profundo com Deus.
-
-Exemplo de oração:
-
-“Senhor Deus, eu te louvo e te agradeço por quem Tu és. Tu és santo, poderoso e digno de toda honra e glória. Obrigado pela vida que me deste, pelo cuidado diário e pela tua graça sobre mim. Hoje eu reconheço que Tu és o centro da minha vida e quero te adorar de todo o meu coração.”
-
-2️⃣ Entrega a Deus
-
-Depois de adorar, o próximo passo é entregar sua vida ao Senhor. A entrega significa confiar a Deus suas decisões, planos, preocupações e desafios. Muitas vezes carregamos pesos emocionais ou preocupações que Deus deseja que coloquemos em Suas mãos.
-
-Esse momento é um tempo para dizer a Deus que você deseja viver segundo a vontade dEle e permitir que Ele guie seus passos.
+Comece seu tempo de oração reconhecendo quem Deus é. A adação não é pedir algo, mas honrar e exaltar o Senhor por Sua grandeza, santidade, amor e poder.
 
 Exemplo de oração:
 
-“Senhor, hoje eu entrego a Ti meus planos, minhas preocupações e tudo aquilo que está em meu coração. Entrego meus pensamentos, minhas decisões e meus caminhos. Que a tua vontade seja feita na minha vida. Guia meus passos e me ajuda a viver de acordo com os teus propósitos.”
+“Senhor Deus, eu te louvo e te agradeço por quem Tu és. Tu és santo, poderoso e digno de toda honra e glória.”
 
-3️⃣ Transformação Espiritual
+---
 
-Neste momento da oração, peça a Deus que transforme seu caráter. O objetivo do jejum espiritual não é apenas cumprir uma prática religiosa, mas permitir que Deus trabalhe em nosso interior.
+### 2️⃣ Entrega a Deus
 
-Peça a Deus para desenvolver em você o fruto do Espírito: amor, alegria, paz, paciência, bondade, fidelidade, mansidão e domínio próprio.
+Entregue a Deus seus planos, decisões e preocupações.
 
-Exemplo de oração:
+Exemplo:
 
-“Senhor, transforma meu coração. Tira de mim tudo aquilo que não agrada a Ti. Desenvolve em mim o fruto do teu Espírito. Ensina-me a viver com amor, paciência e sabedoria. Quero crescer espiritualmente e me tornar cada dia mais parecido com Cristo.”
+“Senhor, hoje eu entrego minha vida em Tuas mãos. Guia meus passos e me ajuda a viver segundo tua vontade.”
 
-4️⃣ Intercessão pelo Pai
+---
 
-Neste momento, ore especificamente por seu pai. A oração de intercessão é quando apresentamos outras pessoas diante de Deus. Ore pela saúde, proteção, direção e principalmente pela vida espiritual dele.
+### 3️⃣ Transformação Espiritual
 
-Você pode pedir que Deus alcance o coração dele, abençoe seu trabalho, sua mente e seus caminhos.
+Peça que Deus transforme seu caráter.
 
-Exemplo de oração:
+Exemplo:
 
-“Senhor, eu coloco diante de Ti a vida do meu pai. Abençoa sua saúde, protege sua vida e guia seus caminhos. Que ele experimente a tua presença e conheça cada vez mais o teu amor. Guarda sua mente, seu coração e todas as áreas da sua vida.”
+“Senhor, transforma meu coração. Desenvolve em mim amor, paciência e sabedoria.”
 
-5️⃣ Intercessão pelos Avós
+---
 
-Agora apresente seus avós a Deus. A Bíblia valoriza muito a família e a honra aos mais velhos. Ore pela saúde, proteção, paz e alegria na vida deles.
+### 4️⃣ Intercessão pelo Pai
 
-Exemplo de oração:
+Ore pela vida, saúde, proteção e vida espiritual do seu pai.
 
-“Senhor, eu também coloco diante de Ti a vida dos meus avós. Abençoa a saúde deles e guarda cada dia da vida deles. Enche a casa deles com tua paz e tua presença. Que eles sintam teu cuidado e tua proteção em todos os momentos.”
+---
 
-6️⃣ Leitura do livro do Jejum
+### 5️⃣ Intercessão pelos Avós
 
+Apresente seus avós diante de Deus e peça bênçãos sobre a vida deles.
+
+---
+
+### 6️⃣ Leitura do Livro / Palavra
+
+Leia o versículo do dia e reflita:
+
+• O que Deus quer me ensinar hoje?  
+• Existe algo que preciso mudar?  
+• Como posso aplicar isso na minha vida?
 """)
 
+# -----------------------------
+# ABA ALVOS
+# -----------------------------
+
 with tabs[3]:
-    pai = st.text_area("Pedidos de oração pelo Pai")
-    avos = st.text_area("Pedidos de oração pelos Avós")
-    if st.button("Salvar"):
-        data = {"pai":pai,"avos":avos}
-        with open("alvos.json","w") as f:
-            json.dump(data,f)
-        st.success("Alvos salvos!")
+
+    st.subheader("🎯 Meus Alvos de Oração")
+
+    pai = st.text_area(
+        "Pedidos de oração pelo Pai",
+        value=alvos_salvos["pai"]
+    )
+
+    avos = st.text_area(
+        "Pedidos de oração pelos Avós",
+        value=alvos_salvos["avos"]
+    )
+
+    if st.button("Salvar Alvos"):
+
+        data = {
+            "pai": pai,
+            "avos": avos
+        }
+
+        with open(alvos_file, "w") as f:
+            json.dump(data, f)
+
+        st.success("Alvos salvos com sucesso 🙏")
