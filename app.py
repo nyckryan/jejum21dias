@@ -41,6 +41,7 @@ with tabs[2]:
 3️⃣ Transformação espiritual  
 4️⃣ Ore pelo seu pai  
 5️⃣ Ore pelos seus avós
+6️⃣ Leitura do Livro 
 """)
 
 with tabs[3]:
