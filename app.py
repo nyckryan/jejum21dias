@@ -135,8 +135,8 @@ Ore pela vida, saúde e proteção do seu pai.
 ### 5️⃣ Intercessão pelos Avós
 Apresente seus avós diante de Deus.
 
-### 6️⃣ Leitura da Palavra
-Leia o versículo do dia e reflita sobre como aplicar na sua vida.
+### 6️⃣ Leitura do livro Jejum
+Leia o livro.
 """)
 
 # -----------------------------
